@@ -13,7 +13,7 @@ should be added using the add_* methods of the Window class.
 import os
 import tkinter as tk
 from tkinter import filedialog
-from typing import Literal, Tuple
+from typing import List, Literal, Tuple, Union
 
 # ------------------------------
 # Globals
@@ -114,7 +114,7 @@ class EasyFileDialogue(EasyWidget):
             main_window,
             description: str = "",
             initial_dir: str = _CURRENT_DIR,
-            filetypes: Tuple[Tuple] = (),
+            filetypes: Union[List[Tuple[str, str]], None] = None,
             selection_type: Literal["file", "dir", "save"] = "file",
             default_value: str = "",
             width: int = None,
@@ -166,12 +166,9 @@ class EasyFileDialogue(EasyWidget):
             self.grid_object,
             text="...",
             width=5,
-            command=lambda: file_chosen(
-                self.object,
-                selection_type,
+            command=lambda: self.file_chosen(
                 initial_dir,
-                filetypes,
-                string_var=self.object_string_var
+                filetypes
             )
         )
 
@@ -227,6 +224,28 @@ class EasyFileDialogue(EasyWidget):
 
         self.object.config(background=background_color)
 
+    def file_chosen(
+            self,
+            initial_dir: str,
+            filetypes: Union[List[Tuple[str, str]], None]
+    ):
+        """
+        Opens a file/directory dialogue and sets the selected path in the entry field.
+        """
+        if ("All files", "*.*") not in filetypes:
+            filetypes.append(("All files", "*.*"))
+
+        if self.selection_type == "file":
+            path = filedialog.askopenfilename(initialdir=initial_dir, filetypes=filetypes)
+        elif self.selection_type == "dir":
+            path = filedialog.askdirectory(initialdir=initial_dir)
+        elif self.selection_type == "save":
+            path = filedialog.asksaveasfilename(initialdir=initial_dir, filetypes=filetypes)
+        else:
+            raise ValueError("Invalid selection type.")
+
+        self.set(path)
+
     def get(self):
         """
         Returns the value of the object string variable.
@@ -243,32 +262,3 @@ class EasyFileDialogue(EasyWidget):
         self.object_string_var.set(value)
         self.check_path(self.selection_type)
         self.object.xview_moveto(1.0)
-
-
-# ------------------------------
-# Functions
-#
-def file_chosen(
-        entry: tk.Entry,
-        selection_type: Literal["file", "dir", "save"],
-        initial_dir: str,
-        filetypes: Tuple[Tuple],
-        string_var: tk.StringVar
-):
-    """
-    Opens a file/directory dialogue and sets the selected path in the entry field.
-    """
-    if selection_type == "file":
-        path = filedialog.askopenfilename(initialdir=initial_dir, filetypes=filetypes)
-    elif selection_type == "dir":
-        path = filedialog.askdirectory(initialdir=initial_dir)
-    elif selection_type == "save":
-        path = filedialog.asksaveasfilename(initialdir=initial_dir, filetypes=filetypes)
-    else:
-        raise ValueError("Invalid selection type.")
-
-    if string_var is not None:
-        string_var.set(path)
-
-    entry.delete(0, tk.END)
-    entry.insert(0, path)

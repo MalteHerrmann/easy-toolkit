@@ -102,7 +102,7 @@ class Window:
     def add_file_dialogue(self,
                           text: str,
                           initial_dir: str = _CURRENT_DIR,
-                          filetypes: Tuple[Tuple[str, str]] = (),
+                          filetypes: Union[List[Tuple[str, str]], None] = None,
                           default_value: str = ...,
                           width: int = None,
                           height: int = None,
