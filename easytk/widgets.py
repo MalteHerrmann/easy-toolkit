@@ -20,6 +20,11 @@ from typing import List, Literal, Tuple, Union
 #
 _CURRENT_DIR = os.getcwd()
 
+# Colors
+_OK_COLOR = "#d3ffce"
+_NOT_OK_COLOR = "#ffe4e1"
+_OVERWRITE_COLOR = "#ffff70"
+
 
 # ------------------------------
 # Classes
@@ -203,22 +208,22 @@ class EasyFileDialogue(EasyWidget):
 
         if self.selection_type == "dir":
             if os.path.isdir(value):
-                background_color = "#d3ffce"
+                background_color = _OK_COLOR
             else:
-                background_color = "#ffe4e1"
+                background_color = _NOT_OK_COLOR
         elif self.selection_type == "file":
             if os.path.isfile(value):
-                background_color = "#d3ffce"
+                background_color = _OK_COLOR
             else:
-                background_color = "#ffe4e1"
+                background_color = _NOT_OK_COLOR
         elif self.selection_type == "save":
             dir_name = os.path.dirname(value)
             if os.path.isfile(value) and os.path.exists(value):
-                background_color = "#ffff70"
+                background_color = _OVERWRITE_COLOR
             elif dir_name == "" or os.path.isdir(dir_name):
-                background_color = "#d3ffce"
+                background_color = _OK_COLOR
             else:
-                background_color = "#ffe4e1"
+                background_color = _NOT_OK_COLOR
         else:
             raise ValueError(f"Invalid path type: {self.selection_type}. Expecting 'file', 'dir' or 'save'.")
 
