@@ -9,7 +9,7 @@ easytk module.
 import os
 import tkinter as tk
 
-from easytk import widgets
+from easytk import return_buttons, widgets
 from typing import Any, List, Literal, Tuple, Union
 
 
@@ -30,9 +30,29 @@ class Window:
     It can be called with the desired interface type.
     """
 
-    def __init__(self, window_type="SelectionFalse", window_title="easytk"):
-        self.return_values = None
+    def __init__(
+            self,
+            window_type: Literal["Selection", "SelectionFalse", "YesNo", "Message"] = "SelectionFalse",
+            window_title: str = "easytk"
+    ):
+        """
+        Creates an instance of an easytk window.
+
+        :param window_type: The type of GUI that will be displayed
+        :param window_title: The title of the GUI
+        """
+        self.label_width: int = ...
+        self.return_values: Tuple[Any] = ...
+        self.title: str = window_title
         self.window_type = window_type
+
+        # Initialize return button texts
+        self.cancel_text: str = "Cancel"  # TODO: necessary? or should SelectionFalse be renamed to SelectionCancel?
+        self.false_text: str = "Cancel"
+        self.no_text: str = "No"
+        self.ok_text: str = "OK"
+        self.selection_text: str = "Select"
+        self.yes_text: str = "Yes"
 
         # Initialize and configure the main window
         self.master_frame = tk.Toplevel(_ROOT)
@@ -42,7 +62,7 @@ class Window:
 
         # Initialize collectors
         self.entries: List[Any] = []
-        self.return_buttons: List[widgets.EasyWidget] = []
+        self.return_buttons: widgets.EasyWidget = ...
         self.return_objects: List[widgets.EasyWidget] = []
 
     def close(self):
@@ -57,6 +77,8 @@ class Window:
         Shows the window and returns the value(s), that are given back
         for the chosen window type.
         """
+        self.add_return_buttons(self.window_type)
+
         self.center_window()
         self.master_frame.update()
         self.master_frame.deiconify()
@@ -77,6 +99,27 @@ class Window:
         y_position = int((screen_height / 2) - (window_height / 2))
 
         self.master_frame.geometry("+{}+{}".format(x_position, y_position))
+
+    def config(self, **kwargs):
+        """
+        Checks if the given kwargs refer to valid settings and if so,
+        changes to the given value.
+
+        :param kwargs: The name of a class attribute and its new value
+        """
+
+        for arg in kwargs:
+            if hasattr(self, arg):
+                previous_value = eval(f"self.{arg}")
+                if not isinstance(kwargs[arg], type(previous_value)) and previous_value is not None:
+                    raise ValueError(f"""Incompatible type {type(kwargs[arg])} for setting: {arg}.\n --> Should be {eval('type(self.{})'.format(arg))}""")
+                else:
+                    if arg == "title":
+                        self.master_frame.title(kwargs[arg])
+                    else:
+                        exec("""self.{} = {}""".format(arg, repr(kwargs[arg])))
+            else:
+                raise ValueError(f"Unknown setting: {arg}\n --> This cannot be edited at the present moment.")
 
     def yes_clicked(self):
         """
@@ -99,6 +142,31 @@ class Window:
         self.return_values = False
         self.close()
 
+    def get_return_values(self) -> Tuple:
+        """
+        Get all returnable values from the widgets contained in the GUI.
+        :return: Tuple of return values from user interface widgets
+        """
+
+        return_values = tuple(widget.get() for widget in self.return_objects)
+        return return_values
+
+    def add_return_buttons(
+            self,
+            window_type: Literal["Selection", "SelectionFalse", "YesNo", "Message"]
+    ) -> widgets.EasyWidget:
+        """
+        Adds the widget corresponding to the chosen window type
+        to the layout.
+
+        :return: the added return buttons object
+        """
+
+        if window_type == "Selection":
+            return return_buttons.EasySelectionButton(self)
+        else:
+            raise ValueError(f"Window type {window_type} not implemented yet.")
+
     def add_file_dialogue(self,
                           text: str,
                           initial_dir: str = _CURRENT_DIR,
@@ -108,7 +176,7 @@ class Window:
                           height: int = None,
                           label_width: int = None,
                           row: int = ...,
-                          column: int = 1,
+                          column: int = 0,
                           column_span: int = 1,
                           frame: tk.Frame = ...,
                           anchor: Literal["nw", "n", "ne", "w", "center", "e", "sw", "s", "se"] = "center",
@@ -118,22 +186,24 @@ class Window:
         """
         Adds a file dialogue to the window.
         """
-        added_widget = widgets.EasyFileDialogue(self,
-                                                description=text,
-                                                selection_type="file",
-                                                initial_dir=initial_dir,
-                                                filetypes=filetypes,
-                                                default_value=default_value,
-                                                width=width,
-                                                height=height,
-                                                label_width=label_width,
-                                                row=row,
-                                                column=column,
-                                                column_span=column_span,
-                                                frame=frame,
-                                                anchor=anchor,
-                                                justify=justify,
-                                                add_to_grid=add_to_grid)
+        added_widget = widgets.EasyFileDialogue(
+            self,
+            description=text,
+            selection_type="file",
+            initial_dir=initial_dir,
+            filetypes=filetypes,
+            default_value=default_value,
+            width=width,
+            height=height,
+            label_width=label_width,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
 
         # Add to collectors
         self.entries.append(added_widget.object)

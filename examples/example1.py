@@ -17,7 +17,8 @@ def main():
     Main function to create the user interface.
     """
     # Create the main window
-    window = easytk.Window("YesNo")
+    window = easytk.Window("Selection")
+    window.config(selection_text="Yep. Do it.")
     window.add_file_dialogue("Test", default_value="Default", filetypes=[("Python files", "*.py")])
     returned_values = window.show()
 

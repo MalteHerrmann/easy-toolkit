@@ -74,6 +74,7 @@ class EasyWidget:
             row: int,
             column: int,
             column_span: int,
+            check_return_buttons: bool = True
     ):
         """
         Adds the widget to the grid. If no row or column values are
@@ -81,10 +82,9 @@ class EasyWidget:
         and adds the widget to the next free row in the first column,
         spanning the amount of columns defined by column_span.
         """
-        if hasattr(self, "main_window") and len(self.main_window.return_buttons) > 0:
+        if check_return_buttons and self.main_window.return_buttons is not ...:
             _RETURN_BUTTONS_EXIST = True
-            for button in self.main_window.return_buttons:
-                button.grid_object.grid_forget()
+            self.main_window.return_buttons.grid_object.grid_forget()
         else:
             _RETURN_BUTTONS_EXIST = False
 
@@ -126,7 +126,7 @@ class EasyFileDialogue(EasyWidget):
             height: int = None,
             label_width: int = None,
             row: int = ...,
-            column: int = 1,
+            column: int = 0,
             column_span: int = 1,
             frame: tk.Frame = ...,
             anchor: Literal["nw", "n", "ne", "w", "center", "e", "sw", "s", "se"] = "center",
