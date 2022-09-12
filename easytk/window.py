@@ -35,7 +35,8 @@ class Window:
     def __init__(
             self,
             window_type: WINDOW_TYPES = "SelectionFalse",
-            window_title: str = "easytk"
+            window_title: str = "easytk",
+            testing: bool = False
     ):
         """
         Creates an instance of an easytk window.
@@ -46,7 +47,8 @@ class Window:
         self.label_width: int = ...
         self.return_values: Tuple[Any] = ...
         self.title: str = window_title
-        self.window_type = window_type
+        self.window_type: WINDOW_TYPES = window_type
+        self._TESTING: bool = testing
 
         # Initialize return button texts
         self.cancel_text: str = "Cancel"  # TODO: necessary? or should SelectionFalse be renamed to SelectionCancel?
@@ -64,7 +66,7 @@ class Window:
 
         # Initialize collectors
         self.entries: List[Any] = []
-        self.return_buttons: widgets.EasyWidget = ...
+        self.return_widget: widgets.EasyReturnWidget = ...
         self.return_objects: List[widgets.EasyWidget] = []
 
     def close(self):
@@ -72,20 +74,22 @@ class Window:
         Closes the window and destroys the tkinter root object.
         """
         self.master_frame.destroy()
-        _ROOT.destroy()
+        if not self._TESTING:
+            _ROOT.destroy()
 
     def show(self) -> Union[Tuple, bool, None]:
         """
-        Shows the window and returns the value(s), that are given back
+        Shows the `Window` and returns the value(s), that are given back
         for the chosen window type.
         """
         column_span, _ = self.master_frame.grid_size()
-        self.add_return_buttons(self.window_type, column_span=column_span)
+        self.return_widget = self.add_return_widget(self.window_type, column_span=column_span)
 
         self.center_window()
-        self.master_frame.update()
-        self.master_frame.deiconify()
-        self.master_frame.wait_window()
+        if not self._TESTING:
+            self.master_frame.update()
+            self.master_frame.deiconify()
+            self.master_frame.wait_window()
 
         return self.return_values
 
@@ -124,7 +128,7 @@ class Window:
             else:
                 raise ValueError(f"Unknown setting: {arg}\n --> This cannot be edited at the present moment.")
 
-    def add_return_buttons(
+    def add_return_widget(
             self,
             window_type: WINDOW_TYPES,
             column_span: int = 1
@@ -138,6 +142,10 @@ class Window:
 
         if window_type == "Selection":
             return return_buttons.EasySelectionButton(self, column_span=column_span)
+        elif window_type == "SelectionFalse":
+            return return_buttons.EasySelectionNoneButtons(self, column_span=column_span)
+        elif window_type == "YesNo":
+            return return_buttons.EasyYesNoButtons(self, column_span=column_span)
         else:
             raise ValueError(f"Window type {window_type} not implemented yet.")
 
@@ -159,7 +167,7 @@ class Window:
             add_to_grid: bool = True
     ):
         """
-        Adds a file dialogue to the window.
+        Adds a `widgets.EasyFileDialogue` to the window.
         """
         added_widget = widgets.EasyFileDialogue(
             self,
@@ -183,5 +191,37 @@ class Window:
         # Add to collectors
         self.entries.append(added_widget.object)
         self.return_objects.append(added_widget)
+
+        return added_widget
+
+    def add_label(
+            self,
+            text: str,
+            width: int = None,
+            height: int = None,
+            row: int = ...,
+            column: int = 0,
+            column_span: int = 1,
+            frame: tk.Frame = ...,
+            anchor: widgets.ANCHORS = "center",
+            justify: widgets.JUSTIFICATIONS = "left",
+            add_to_grid: bool = True
+    ):
+        """
+        Adds an `widgets.EasyLabel` to the window.
+        """
+        added_widget = widgets.EasyLabel(
+            self,
+            text=text,
+            width=width,
+            height=height,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
 
         return added_widget

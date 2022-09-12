@@ -55,7 +55,8 @@ class EasyReturnWidget(EasyWidget):
         and assigns them to the main window.
         """
 
-        self.main_window.return_values = tuple(widget.get() for widget in self.main_window.return_objects)
+        return_values = tuple(widget.get() for widget in self.main_window.return_objects)
+        self.main_window.return_values = return_values
         self.main_window.close()
 
 
@@ -84,6 +85,7 @@ class EasySelectionButton(EasyReturnWidget):
 
         # Widget frame
         self.grid_object = tk.Frame(self.frame)
+        self.grid_object.grid_propagate(False)
 
         # Button
         self.object = tk.Button(
@@ -91,15 +93,82 @@ class EasySelectionButton(EasyReturnWidget):
             text=main_window.selection_text,
             command=self.get_return_values
         )
-
-        # Arrange widgets
         self.object.pack()
+        self.insert_into_grid(self.frame, row, column, column_span, check_return_widget=False)
 
-        # No widget shrinking
+
+class EasySelectionNoneButtons(EasyReturnWidget):
+
+    def __init__(self,
+                 main_window,
+                 row: int = 0,
+                 column: int = 0,
+                 column_span: int = 1,
+                 frame: tk.Frame = ...
+                 ):
+
+        super().__init__()
+        self.apply_settings(main_window, row, column, column_span, frame, "center", "center")
+
+        # TODO: Refactor this?
+
+        # Widget frame
+        self.grid_object = tk.Frame(self.frame)
         self.grid_object.grid_propagate(False)
 
-        # Add to grid
-        self.insert_into_grid(self.frame, row, column, column_span, check_return_buttons=False)
+        # Buttons
+        self.select_button = tk.Button(
+            self.grid_object,
+            text=main_window.selection_text,
+            command=self.get_return_values
+        )
+        self.select_button.pack(side="left")
+
+        self.false_button = tk.Button(
+            self.grid_object,
+            text=main_window.false_text,
+            command=self.no_clicked
+        )
+        self.false_button.pack(side="left")
+
+        self.insert_into_grid(self.frame, row, column, column_span, check_return_widget=False)
+
+
+class EasyYesNoButtons(EasyReturnWidget):
+
+    def __init__(self,
+                 main_window,
+                 row: int = 0,
+                 column: int = 0,
+                 column_span: int = 1,
+                 frame: tk.Frame = ...
+    ):
+
+        super().__init__()
+        self.apply_settings(main_window, row, column, column_span, frame, "center", "center")
+
+        # TODO: Refactor this?
+
+        # Widget frame
+        self.grid_object = tk.Frame(self.frame)
+        self.grid_object.grid_propagate(False)
+
+        # Buttons
+        self.yes_button = tk.Button(
+            self.grid_object,
+            text=main_window.yes_text,
+            command=self.yes_clicked
+        )
+        self.yes_button.pack(side="left")
+
+        self.no_button = tk.Button(
+            self.grid_object,
+            text=main_window.no_text,
+            command=self.no_clicked
+        )
+        self.no_button.pack(side="left")
+
+        self.insert_into_grid(self.frame, row, column, column_span, check_return_widget=False)
 
 
 # ------------------------------

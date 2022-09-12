@@ -51,6 +51,7 @@ class EasyWidget:
         self.grid_object: tk.Frame = ...
         self.justify: str = ...
         self.main_window = ...
+        self.object_string_var: tk.StringVar = ...
         self.padx: int = 2
         self.row: int = ...
 
@@ -81,7 +82,7 @@ class EasyWidget:
             row: int,
             column: int,
             column_span: int,
-            check_return_buttons: bool = True
+            check_return_widget: bool = True
     ):
         """
         Adds the widget to the grid. If no row or column values are
@@ -89,20 +90,20 @@ class EasyWidget:
         and adds the widget to the next free row in the first column,
         spanning the amount of columns defined by column_span.
         """
-        if check_return_buttons and self.main_window.return_buttons is not ...:
-            _RETURN_BUTTONS_EXIST = True
-            self.main_window.return_buttons.grid_object.grid_forget()
+        if check_return_widget and self.main_window.return_widget is not ...:
+            _RETURN_WIDGET_EXISTS = True
+            self.main_window.return_widget.grid_object.grid_forget()
         else:
-            _RETURN_BUTTONS_EXIST = False
+            _RETURN_WIDGET_EXISTS = False
 
         if row is ...:
             row = frame.grid_size()[1]
 
         self.grid_object.grid(row=row, column=column, columnspan=column_span)
 
-        if _RETURN_BUTTONS_EXIST:
-            for button in self.main_window.return_buttons:
-                button.grid_object.grid()
+        if _RETURN_WIDGET_EXISTS:
+            for widget in self.main_window.return_widget:
+                widget.grid_object.grid()
 
     def remove_from_grid(self):
         """
@@ -112,6 +113,21 @@ class EasyWidget:
         without any positioning arguments.
         """
         self.grid_object.grid_remove()
+
+    def get(self):
+        """
+        Returns the value of the object string variable.
+        """
+        return self.object_string_var.get()
+
+    def set(self, value: str):
+        """
+        Sets the value of the object string variable.
+        """
+        if not isinstance(value, str):
+            value = str(value)
+
+        self.object_string_var.set(value)
 
 
 class EasyFileDialogue(EasyWidget):
@@ -258,12 +274,6 @@ class EasyFileDialogue(EasyWidget):
 
         self.set(path)
 
-    def get(self):
-        """
-        Returns the value of the object string variable.
-        """
-        return self.object_string_var.get()
-
     def set(self, value: str):
         """
         Sets the value of the object string variable.
@@ -274,3 +284,60 @@ class EasyFileDialogue(EasyWidget):
         self.object_string_var.set(value)
         self.check_path(self.selection_type)
         self.object.xview_moveto(1.0)
+
+
+class EasyLabel(EasyWidget):
+    """
+    Class to define a `tk.Label` widget, which can be used to display simple text.
+
+    The text can be changed via the `set` method and returned with the `get` method
+    of an `EasyLabel` instance.
+    """
+
+    def __init__(
+            self,
+            main_window,
+            text: str = "",
+            width: int = None,
+            height: int = None,
+            row: int = ...,
+            column: int = 0,
+            column_span: int = 1,
+            frame: tk.Frame = ...,
+            anchor: ANCHORS = "center",
+            justify: JUSTIFICATIONS = "left",
+            add_to_grid: bool = True
+    ):
+        """
+        Creates a new EasyFileDialogue object.
+
+        :type main_window: easytk.Window
+        """
+        super().__init__()
+        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify)
+
+        # Widget frame
+        self.grid_object = tk.Frame(self.frame, width=width, height=height)
+
+        # Label
+        self.object_string_var = tk.StringVar()
+        self.object_string_var.set(text)
+        self.object = tk.Label(
+            self.grid_object,
+            textvariable=self.object_string_var,
+            anchor=anchor,
+            justify=justify
+        )
+
+        # Arrange widgets
+        self.object.pack(side="left", fill="both", expand=True, padx=self.padx)
+
+        # No widget shrinking
+        self.grid_object.grid_propagate(False)
+
+        # Add to grid and then remove if desired
+        self.insert_into_grid(self.frame, row, column, column_span)
+        if add_to_grid is False:
+            self.remove_from_grid()
+
+
