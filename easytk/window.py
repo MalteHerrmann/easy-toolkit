@@ -20,6 +20,8 @@ _CURRENT_DIR = os.getcwd()
 _ROOT = tk.Tk()
 _ROOT.withdraw()
 
+WINDOW_TYPES = Literal["Selection", "SelectionFalse", "YesNo", "Message"]
+
 
 # ------------------------------
 # Classes
@@ -32,7 +34,7 @@ class Window:
 
     def __init__(
             self,
-            window_type: Literal["Selection", "SelectionFalse", "YesNo", "Message"] = "SelectionFalse",
+            window_type: WINDOW_TYPES = "SelectionFalse",
             window_title: str = "easytk"
     ):
         """
@@ -77,7 +79,8 @@ class Window:
         Shows the window and returns the value(s), that are given back
         for the chosen window type.
         """
-        self.add_return_buttons(self.window_type)
+        column_span, _ = self.master_frame.grid_size()
+        self.add_return_buttons(self.window_type, column_span=column_span)
 
         self.center_window()
         self.master_frame.update()
@@ -121,40 +124,11 @@ class Window:
             else:
                 raise ValueError(f"Unknown setting: {arg}\n --> This cannot be edited at the present moment.")
 
-    def yes_clicked(self):
-        """
-        Callback function for the yes button.
-        """
-        self.return_values = True
-        self.close()
-
-    def no_clicked(self):
-        """
-        Callback function for the no button.
-        """
-        self.return_values = False
-        self.close()
-
-    def cancel_clicked(self):
-        """
-        Callback function for the cancel button.
-        """
-        self.return_values = False
-        self.close()
-
-    def get_return_values(self) -> Tuple:
-        """
-        Get all returnable values from the widgets contained in the GUI.
-        :return: Tuple of return values from user interface widgets
-        """
-
-        return_values = tuple(widget.get() for widget in self.return_objects)
-        return return_values
-
     def add_return_buttons(
             self,
-            window_type: Literal["Selection", "SelectionFalse", "YesNo", "Message"]
-    ) -> widgets.EasyWidget:
+            window_type: WINDOW_TYPES,
+            column_span: int = 1
+    ) -> return_buttons.EasyReturnWidget:
         """
         Adds the widget corresponding to the chosen window type
         to the layout.
@@ -163,26 +137,27 @@ class Window:
         """
 
         if window_type == "Selection":
-            return return_buttons.EasySelectionButton(self)
+            return return_buttons.EasySelectionButton(self, column_span=column_span)
         else:
             raise ValueError(f"Window type {window_type} not implemented yet.")
 
-    def add_file_dialogue(self,
-                          text: str,
-                          initial_dir: str = _CURRENT_DIR,
-                          filetypes: Union[List[Tuple[str, str]], None] = None,
-                          default_value: str = ...,
-                          width: int = None,
-                          height: int = None,
-                          label_width: int = None,
-                          row: int = ...,
-                          column: int = 0,
-                          column_span: int = 1,
-                          frame: tk.Frame = ...,
-                          anchor: Literal["nw", "n", "ne", "w", "center", "e", "sw", "s", "se"] = "center",
-                          justify: Literal["left", "right", "center"] = "left",
-                          add_to_grid: bool = True
-                          ):
+    def add_file_dialogue(
+            self,
+            text: str,
+            initial_dir: str = _CURRENT_DIR,
+            filetypes: Union[List[Tuple[str, str]], None] = None,
+            default_value: str = ...,
+            width: int = None,
+            height: int = None,
+            label_width: int = None,
+            row: int = ...,
+            column: int = 0,
+            column_span: int = 1,
+            frame: tk.Frame = ...,
+            anchor: widgets.ANCHORS = "center",
+            justify: widgets.JUSTIFICATIONS = "left",
+            add_to_grid: bool = True
+    ):
         """
         Adds a file dialogue to the window.
         """

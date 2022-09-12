@@ -25,6 +25,13 @@ _OK_COLOR = "#d3ffce"
 _NOT_OK_COLOR = "#ffe4e1"
 _OVERWRITE_COLOR = "#ffff70"
 
+ANCHORS = Literal["nw", "n", "ne", "w", "center", "e", "sw", "s", "se"]
+JUSTIFICATIONS = Literal["left", "right", "center"]
+
+# TODO: Enable widget resizing/filling to container
+# TODO: Allow multiple columns next to each other (ideally with definable proportions)
+# TODO: Add more widgets
+
 
 # ------------------------------
 # Classes
@@ -54,8 +61,8 @@ class EasyWidget:
             column: int,
             column_span: int,
             frame: tk.Frame,
-            anchor: Literal["nw", "n", "ne", "w", "center", "e", "sw", "s", "se"],
-            justify: Literal["left", "right", "center"]
+            anchor: ANCHORS,
+            justify: JUSTIFICATIONS
     ):
         """
         Applies the given settings to the widget.
@@ -129,8 +136,8 @@ class EasyFileDialogue(EasyWidget):
             column: int = 0,
             column_span: int = 1,
             frame: tk.Frame = ...,
-            anchor: Literal["nw", "n", "ne", "w", "center", "e", "sw", "s", "se"] = "center",
-            justify: Literal["left", "right", "center"] = "left",
+            anchor: ANCHORS = "center",
+            justify: JUSTIFICATIONS = "left",
             add_to_grid: bool = True
     ):
         """

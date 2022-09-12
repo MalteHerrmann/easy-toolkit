@@ -13,11 +13,53 @@ window type.
 import tkinter as tk
 from easytk.widgets import EasyWidget
 
+# TODO: Add more buttons
+
 
 # ------------------------------
 # Classes
 #
-class EasySelectionButton(EasyWidget):
+class EasyReturnWidget(EasyWidget):
+    """
+    Base class to derive the respective return widgets from.
+    It contains the methods, to define the main window's return
+    value(s) and close the GUI.
+    """
+
+    def yes_clicked(self):
+        """
+        Callback function for the yes button.
+        """
+        self.main_window.return_values = True
+        self.main_window.close()
+
+    def no_clicked(self):
+        """
+        Callback function for the no button.
+        """
+        self.main_window.return_values = False
+        self.main_window.close()
+
+    def cancel_clicked(self):
+        """
+        Callback function for the cancel button.
+        """
+        self.main_window.return_values = False
+        self.main_window.close()
+
+    def get_return_values(self):
+        """
+        Callback function for the select button.
+
+        Gets all returnable values from the widgets contained in the GUI
+        and assigns them to the main window.
+        """
+
+        self.main_window.return_values = tuple(widget.get() for widget in self.main_window.return_objects)
+        self.main_window.close()
+
+
+class EasySelectionButton(EasyReturnWidget):
     """
     Class to define a frame containing a button, that triggers
     the GUI to return the values from all widgets, that contain
@@ -47,7 +89,7 @@ class EasySelectionButton(EasyWidget):
         self.object = tk.Button(
             self.grid_object,
             text=main_window.selection_text,
-            command=main_window.get_return_values
+            command=self.get_return_values
         )
 
         # Arrange widgets
