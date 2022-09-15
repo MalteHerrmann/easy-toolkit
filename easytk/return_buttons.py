@@ -29,7 +29,7 @@ class EasyReturnWidget(EasyWidget):
     def __init__(self,
                  main_window,
                  return_type: Literal["Selection", "SelectionFalse", "YesNo"],
-                 row: int = 0,
+                 row: int = ...,
                  column: int = 0,
                  column_span: int = 1,
                  frame: tk.Frame = ...

@@ -39,7 +39,7 @@ class Window:
             testing: bool = False
     ):
         """
-        Creates an instance of an easytk window.
+        Creates an instance of an `easytk` window.
 
         :param window_type: The type of GUI that will be displayed
         :param window_title: The title of the GUI
@@ -51,7 +51,6 @@ class Window:
         self._TESTING: bool = testing
 
         # Initialize return button texts
-        self.cancel_text: str = "Cancel"  # TODO: necessary? or should SelectionFalse be renamed to SelectionCancel?
         self.false_text: str = "Cancel"
         self.no_text: str = "No"
         self.ok_text: str = "OK"
@@ -109,17 +108,20 @@ class Window:
 
     def config(self, **kwargs):
         """
-        Checks if the given kwargs refer to valid settings and if so,
+        Checks if the given `kwargs` refer to valid settings and if so,
         changes to the given value.
 
-        :param kwargs: The name of a class attribute and its new value
+        Example: `window.config(width=550)`
+
+        :param kwargs: The name of an attribute and its new value
         """
 
         for arg in kwargs:
             if hasattr(self, arg):
                 previous_value = eval(f"self.{arg}")
                 if not isinstance(kwargs[arg], type(previous_value)) and previous_value is not None:
-                    raise ValueError(f"""Incompatible type {type(kwargs[arg])} for setting: {arg}.\n --> Should be {eval('type(self.{})'.format(arg))}""")
+                    raise ValueError(f"""Incompatible type {type(kwargs[arg])} for setting: {arg}.\n""" +
+                                     f""" --> Should be {eval('type(self.{})'.format(arg))}""")
                 else:
                     if arg == "title":
                         self.master_frame.title(kwargs[arg])
