@@ -66,7 +66,7 @@ class Window:
 
         # Initialize collectors
         self.entries: List[Any] = []
-        self.return_widget: widgets.EasyReturnWidget = ...
+        self.return_widget: return_buttons.EasyReturnWidget = ...
         self.return_objects: List[widgets.EasyWidget] = []
 
     def close(self):
@@ -137,17 +137,10 @@ class Window:
         Adds the widget corresponding to the chosen window type
         to the layout.
 
-        :return: the added return buttons object
+        :return: the added `EasyReturnWidget` object
         """
 
-        if window_type == "Selection":
-            return return_buttons.EasySelectionButton(self, column_span=column_span)
-        elif window_type == "SelectionFalse":
-            return return_buttons.EasySelectionNoneButtons(self, column_span=column_span)
-        elif window_type == "YesNo":
-            return return_buttons.EasyYesNoButtons(self, column_span=column_span)
-        else:
-            raise ValueError(f"Window type {window_type} not implemented yet.")
+        return return_buttons.EasyReturnWidget(self, window_type, column_span=column_span)
 
     def add_file_dialogue(
             self,
