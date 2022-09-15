@@ -6,8 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - Release first working version
+- Add widgets:
+  - `EasyFrame`
+  - `EasyLabelFrame`
+  - `EasyText`
+  - `EasyEntry`
+  - `EasyCombobox`
+  - `EasyButton`
+  - `EasyListbox`
+  - `EasyImage`
+  - ...
+- Add top-level functions:
+  - `select`
+  - `choose_file`
+  - `choose_dir`
+  - `choose_save_path`
+  - `ask_yes_no`
+  - ...
+- ...
 
 ----
+
+## **v0.1.0**
+2022-09-13 | Malte Herrmann
+
+#### Add:
+- Add main window for GUIs: `Window`
+- Add widgets:
+  - `EasyLabel` 
+  - `EasyFileDialogue` 
+  - `EasyReturnWidget` for window types `Selection`, `SelectionFalse`, `YesNo`
 
 
 

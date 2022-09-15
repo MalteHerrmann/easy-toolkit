@@ -21,7 +21,7 @@ used user interfaces, like a simple yes/no dialogue, or a dropdown selection.
 
 """
 
-__version__ = "0.2.0"
+__version__ = "0.1.0"
 
 # ------------------------------
 # High level imports
