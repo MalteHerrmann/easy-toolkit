@@ -15,7 +15,7 @@ with open(os.path.join(this_dir, "easytk", "__init__.py"), "r") as f:
 with open(os.path.join(this_dir, "LICENSE"), "r") as f:
     license_contents = f.read()
 
-NAME = "easytk"
+NAME = "easy-toolkit"
 VERSION = version
 DESCRIPTION = "A simple API wrapper to create functional tkinter GUIs using only a few lines."
 KEYWORDS = "tkinter gui api scripting interaction"
@@ -29,7 +29,7 @@ CLASSIFIERS = [
     "Development Status :: 2 - Pre-Alpha",
     "Environment :: Console",
     "Intended Audience :: Developers",
-    "License :: MIT License",
+    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
