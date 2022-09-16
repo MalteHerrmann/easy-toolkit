@@ -5,3 +5,7 @@
 */__pycache__
 easytk/widgets/__pycache__
 
+# Installation files
+/dist
+*.egg-info
+
