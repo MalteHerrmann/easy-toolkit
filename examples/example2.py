@@ -19,8 +19,8 @@ def main():
     # Create the main window
     window = easytk.Window("Selection")
     window.config(selection_text="Yep. Do it.")
-    window.add_file_dialogue("Test", default_value="Default", filetypes=[("Python files", "*.py")], row=0, column=0)
-    window.add_file_dialogue("Test 2", default_value="Default", filetypes=[("Python files", "*.py")], row=0, column=1)
+    window.add_file_dialog("Test", default_value="Default", filetypes=[("Python files", "*.py")], row=0, column=0)
+    window.add_file_dialog("Test 2", default_value="Default", filetypes=[("Python files", "*.py")], row=0, column=1)
     returned_values = window.show()
 
     # Print the returned values

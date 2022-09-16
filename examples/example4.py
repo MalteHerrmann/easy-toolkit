@@ -23,11 +23,10 @@ def main():
     window = easytk.Window("SelectionFalse")
     window.config(selection_text="Yep. Do it.")
     window.config(false_text="Nope")
-    window.add_file_dialog("Test", default_value="Default", filetypes=[("Python files", "*.py")])
+    window.add_checkbutton("Toggle me on or off")
     window.add_entry("Example Input", default_value="Test Default")
-    window.add_text("This is a lot of text over and over again"*5)
-    window.add_text("This is a lot of text over and over again"*3, monospace=True)
-    window.add_text("This is a lot of text over and over again"*3, export=True)
+    window.add_combobox(["Test 1", "Test 2", "Test 3"], "Example Combobox")
+    window.add_listbox(["abc", "def", "ghi"], "Test Listbox")
     returned_values = window.show()
 
     # Print the returned values

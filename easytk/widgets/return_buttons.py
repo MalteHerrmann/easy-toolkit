@@ -1,7 +1,10 @@
 """
-This module contains the different return button objects,
-that are used to close the easytk GUI and return the
-respective values to the user.
+This module contains a generalized class, which serves
+the different return button objects, that are used to
+close the easytk GUI and return the respective values
+to the user. Depending on the selected window type,
+this might be a collection of the user inputs (`Selection`)
+or a boolean value (`SelectionFalse`, `YesNo`).
 
 These widgets are not directly usable and are inserted into
 the easytk window automatically, depending on the chosen
@@ -13,7 +16,7 @@ window type.
 #
 import tkinter as tk
 from typing import Literal
-from easytk.widgets import EasyWidget
+from easytk.widgets.easy_widget import EasyWidget
 
 
 # ------------------------------
@@ -21,8 +24,10 @@ from easytk.widgets import EasyWidget
 #
 class EasyReturnWidget(EasyWidget):
     """
-    Base class to derive the respective return widgets from.
-    It contains the methods, to define the main window's return
+    Generalized class, which builds the necessary widgets for
+    the selected return type for the GUI (e.g. `SelectionFalse`).
+
+    It contains methods to define the main window's return
     value(s) and close the GUI.
     """
 
@@ -47,7 +52,6 @@ class EasyReturnWidget(EasyWidget):
                 command=self.get_return_values
             )
             self.select_button.pack(side="left")
-
         elif return_type == "YesNo":
             self.yes_button = tk.Button(
                 self.grid_object,
@@ -58,13 +62,21 @@ class EasyReturnWidget(EasyWidget):
         else:
             raise ValueError(f"Unknown window type: {return_type}")
 
-        if return_type in ("SelectionFalse", "YesNo"):
+        if return_type == "SelectionFalse":
             self.false_button = tk.Button(
                 self.grid_object,
                 text=main_window.false_text,
                 command=self.no_clicked
             )
             self.false_button.pack(side="left")
+
+        elif return_type == "YesNo":
+            self.no_button = tk.Button(
+                self.grid_object,
+                text=main_window.no_text,
+                command=self.no_clicked
+            )
+            self.no_button.pack(side="left")
 
         self.insert_into_grid(self.frame, row, column, column_span, check_return_widget=False)
 

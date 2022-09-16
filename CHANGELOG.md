@@ -9,12 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add widgets:
   - `EasyFrame`
   - `EasyLabelFrame`
-  - `EasyText`
-  - `EasyEntry`
-  - `EasyCombobox`
   - `EasyButton`
   - `EasyListbox`
   - `EasyImage`
+  - `EasyTable`
+  - `EasyTitle`
   - ...
 - Add top-level functions:
   - `select`
@@ -33,9 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Add:
 - Add main window for GUIs: `Window`
 - Add widgets:
-  - `EasyLabel` 
+  - `EasyCheckbutton`
+  - `EasyCombobox`
+  - `EasyEntry`
   - `EasyFileDialogue` 
+  - `EasyLabel` 
   - `EasyReturnWidget` for window types `Selection`, `SelectionFalse`, `YesNo`
+  - `EasyText`
+
 
 
 

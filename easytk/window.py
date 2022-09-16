@@ -9,9 +9,9 @@ easytk module.
 import os
 import tkinter as tk
 
-from easytk import return_buttons, widgets
+from easytk import widgets
+from easytk.widgets.literals import ANCHORS, JUSTIFICATIONS
 from typing import Any, List, Literal, Tuple, Union
-
 
 # ------------------------------
 # Globals
@@ -33,10 +33,10 @@ class Window:
     """
 
     def __init__(
-            self,
-            window_type: WINDOW_TYPES = "SelectionFalse",
-            window_title: str = "easytk",
-            testing: bool = False
+        self,
+        window_type: WINDOW_TYPES = "SelectionFalse",
+        window_title: str = "easytk",
+        testing: bool = False
     ):
         """
         Creates an instance of an `easytk` window.
@@ -56,6 +56,7 @@ class Window:
         self.ok_text: str = "OK"
         self.selection_text: str = "Select"
         self.yes_text: str = "Yes"
+        self.return_widget: widgets.EasyReturnWidget = ...
 
         # Initialize and configure the main window
         self.master_frame = tk.Toplevel(_ROOT)
@@ -64,8 +65,6 @@ class Window:
         self.master_frame.title(window_title)
 
         # Initialize collectors
-        self.entries: List[Any] = []
-        self.return_widget: return_buttons.EasyReturnWidget = ...
         self.return_objects: List[widgets.EasyWidget] = []
 
     def close(self):
@@ -131,10 +130,10 @@ class Window:
                 raise ValueError(f"Unknown setting: {arg}\n --> This cannot be edited at the present moment.")
 
     def add_return_widget(
-            self,
-            window_type: WINDOW_TYPES,
-            column_span: int = 1
-    ) -> return_buttons.EasyReturnWidget:
+        self,
+        window_type: WINDOW_TYPES,
+        column_span: int = 1
+    ) -> widgets.EasyReturnWidget:
         """
         Adds the widget corresponding to the chosen window type
         to the layout.
@@ -142,31 +141,31 @@ class Window:
         :return: the added `EasyReturnWidget` object
         """
 
-        return return_buttons.EasyReturnWidget(self, window_type, column_span=column_span)
+        return widgets.EasyReturnWidget(self, window_type, column_span=column_span)
 
-    def add_file_dialogue(
-            self,
-            text: str,
-            initial_dir: str = _CURRENT_DIR,
-            filetypes: Union[List[Tuple[str, str]], None] = None,
-            default_value: str = ...,
-            width: int = None,
-            height: int = None,
-            label_width: int = None,
-            row: int = ...,
-            column: int = 0,
-            column_span: int = 1,
-            frame: tk.Frame = ...,
-            anchor: widgets.ANCHORS = "center",
-            justify: widgets.JUSTIFICATIONS = "left",
-            add_to_grid: bool = True
+    def add_file_dialog(
+        self,
+        description: str,
+        initial_dir: str = _CURRENT_DIR,
+        filetypes: Union[List[Tuple[str, str]], None] = None,
+        default_value: str = ...,
+        width: int = None,
+        height: int = None,
+        label_width: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
     ):
         """
         Adds a `widgets.EasyFileDialogue` to the window.
         """
-        added_widget = widgets.EasyFileDialogue(
+        added_widget = widgets.EasyFileDialog(
             self,
-            description=text,
+            description=description,
             selection_type="file",
             initial_dir=initial_dir,
             filetypes=filetypes,
@@ -183,24 +182,21 @@ class Window:
             add_to_grid=add_to_grid
         )
 
-        # Add to collectors
-        self.entries.append(added_widget.object)
         self.return_objects.append(added_widget)
-
         return added_widget
 
     def add_label(
-            self,
-            text: str,
-            width: int = None,
-            height: int = None,
-            row: int = ...,
-            column: int = 0,
-            column_span: int = 1,
-            frame: tk.Frame = ...,
-            anchor: widgets.ANCHORS = "center",
-            justify: widgets.JUSTIFICATIONS = "left",
-            add_to_grid: bool = True
+        self,
+        text: str,
+        width: int = None,
+        height: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
     ):
         """
         Adds an `widgets.EasyLabel` to the window.
@@ -220,3 +216,196 @@ class Window:
         )
 
         return added_widget
+
+    def add_entry(
+        self,
+        description: str = "",
+        default_value: str = "",
+        width: int = None,
+        height: int = None,
+        label_width: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
+    ):
+        """
+        Adds a `widgets.EasyEntry` to the window.
+        """
+
+        added_widget = widgets.EasyEntry(
+            self,
+            description=description,
+            default_value=default_value,
+            width=width,
+            height=height,
+            label_width=label_width,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
+
+        self.return_objects.append(added_widget)
+        return added_widget
+
+    def add_text(
+        self,
+        text: str = "",
+        export: bool = False,
+        monospace: bool = False,
+        width: int = None,
+        height: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
+    ):
+        """
+        Adds a `widgets.EasyText` to the window.
+        """
+
+        added_widget = widgets.EasyText(
+            self,
+            text=text,
+            export=export,
+            monospace=monospace,
+            width=width,
+            height=height,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
+
+        if added_widget.export:
+            self.return_objects.append(added_widget)
+
+        return added_widget
+
+    def add_checkbutton(
+        self,
+        description: str = "",
+        on: bool = False,
+        width: int = None,
+        height: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
+    ):
+        """
+        Adds a `widgets.EasyCheckbutton` to the window.
+        """
+
+        added_widget = widgets.EasyCheckbutton(
+            self,
+            description=description,
+            on=on,
+            width=width,
+            height=height,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
+
+        self.return_objects.append(added_widget)
+        return added_widget
+
+    def add_combobox(
+        self,
+        values: List[str],
+        description: str = "",
+        width: int = None,
+        height: int = None,
+        label_width: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
+    ):
+        """
+        Adds a `widgets.EasyCombobox` to the window.
+        """
+
+        added_widget = widgets.EasyCombobox(
+            self,
+            values=values,
+            description=description,
+            width=width,
+            height=height,
+            label_width=label_width,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
+
+        self.return_objects.append(added_widget)
+        return added_widget
+
+    def add_listbox(
+        self,
+        values: List[str],
+        description: str = "",
+        select_mode: Literal['browse', 'single', 'extended', 'multiple'] = 'browse',
+        width: int = None,
+        height: int = None,
+        label_width: int = None,
+        row: int = ...,
+        column: int = 0,
+        column_span: int = 1,
+        frame: tk.Frame = ...,
+        anchor: ANCHORS = "center",
+        justify: JUSTIFICATIONS = "left",
+        add_to_grid: bool = True
+    ):
+        """
+        Adds a `widgets.EasyCombobox` to the window.
+        """
+
+        added_widget = widgets.EasyListbox(
+            self,
+            values=values,
+            description=description,
+            select_mode=select_mode,
+            width=width,
+            height=height,
+            label_width=label_width,
+            row=row,
+            column=column,
+            column_span=column_span,
+            frame=frame,
+            anchor=anchor,
+            justify=justify,
+            add_to_grid=add_to_grid
+        )
+
+        self.return_objects.append(added_widget)
+        return added_widget
+

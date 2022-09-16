@@ -4,16 +4,16 @@ import re
 from setuptools import find_packages, setup
 
 # Read version from easytk.__version__
-thisdir = os.path.dirname(__file__)
-with open(os.path.join(thisdir, "easytk", "__init__.py"), "r") as f:
+this_dir = os.path.dirname(__file__)
+with open(os.path.join(this_dir, "easytk", "__init__.py"), "r") as f:
     for line in f:
         if "__version__" in line:
             version = re.search(r'__version__ = "([^"]+)"', line).group(1)
             break
 
 # Read license
-with open(os.path.join(thisdir, "LICENSE"), "r") as f:
-    license = f.read()
+with open(os.path.join(this_dir, "LICENSE"), "r") as f:
+    license_contents = f.read()
 
 NAME = "easytk"
 VERSION = version
@@ -22,10 +22,8 @@ KEYWORDS = "tkinter gui api scripting interaction"
 AUTHOR = "Malte Herrmann"
 AUTHOR_EMAIL = "malteherrmann.mail@web.de"
 URL = "https://github.com/MalteHerrmann/easy-toolkit"
-LICENSE = license
+LICENSE = license_contents
 PACKAGES = find_packages(exclude=["examples", "tests", "tests.*"])
-
-INSTALL_REQUIRES = ["Pillow>=3.3.2"]
 
 CLASSIFIERS = [
     "Development Status :: 2 - Pre-Alpha",
@@ -35,7 +33,7 @@ CLASSIFIERS = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.9",
     "Topic :: Software Development :: Libraries"
 ]
 
@@ -49,7 +47,6 @@ params = {
     "url": URL,
     "license": LICENSE,
     "packages": PACKAGES,
-    "install_requires": INSTALL_REQUIRES,
     "classifiers": CLASSIFIERS
 }
 

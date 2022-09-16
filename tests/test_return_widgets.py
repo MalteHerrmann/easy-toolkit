@@ -14,7 +14,7 @@ import easytk
 def test_selection_should_return_tuple():
     expected = "Test123"
     window = easytk.Window("Selection", testing=True)
-    window.add_file_dialogue("Test File", default_value=expected)
+    window.add_file_dialog("Test File", default_value=expected)
     window.show()
     window.return_widget.get_return_values()
     returned = window.return_values
@@ -23,7 +23,7 @@ def test_selection_should_return_tuple():
 
 def test_selection_false_should_return_False():
     window = easytk.Window("SelectionFalse", testing=True)
-    window.add_file_dialogue("Press No.", default_value="Test123")
+    window.add_file_dialog("Press No.", default_value="Test123")
     window.show()
     window.return_widget.no_clicked()
     returned = window.return_values
