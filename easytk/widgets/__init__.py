@@ -26,3 +26,6 @@ from easytk.widgets.return_buttons import EasyReturnWidget
 # TODO: Change default anchors to "w"? Or add "label_anchor" attribute?
 # TODO: Add user stories tests
 # TODO: Use ttk styles?
+# TODO: Add project description for PyPI
+# TODO: Fix resizing of windows
+

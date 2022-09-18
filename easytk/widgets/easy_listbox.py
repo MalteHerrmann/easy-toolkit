@@ -9,6 +9,7 @@ class EasyListbox(EasyWidget):
     Class to define a widget, that displays a `tkinter.Listbox`.
     """
 
+    # TODO: use height parameter (=number of lines) for listbox (-> https://www.pythontutorial.net/tkinter/tkinter-listbox/)
     def __init__(
             self,
             main_window,
