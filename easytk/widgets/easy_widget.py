@@ -22,6 +22,7 @@ class EasyWidget:
         self.object_string_var: tk.StringVar = ...
         self.padx: int = 2
         self.row: int = ...
+        self.width: int = ...
 
     def apply_settings(
             self,
@@ -31,7 +32,8 @@ class EasyWidget:
             column_span: int,
             frame: tk.Frame,
             anchor: ANCHORS,
-            justify: JUSTIFICATIONS
+            justify: JUSTIFICATIONS,
+            width: int = None,
     ):
         """
         Applies the given settings to the `EasyWidget`.
@@ -42,9 +44,11 @@ class EasyWidget:
         self.row = row
         self.column = column
         self.column_span = column_span
-        self.frame = main_window.master_frame if frame is ... else frame
+        self.frame = main_window.main_frame if frame is ... else frame
+        # self.frame = main_window.master_frame if frame is ... else frame
         self.anchor = anchor
         self.justify = justify
+        self.width = main_window.width if width is None else width
 
     def insert_into_grid(
             self,
@@ -62,6 +66,9 @@ class EasyWidget:
         next free row in the first column, spanning the amount of columns
         defined by `column_span`.
         """
+        # TODO: Add options for widgets to define own sticky value
+        sticky = 'wen'  # stick to both sides
+
         if check_return_widget and self.main_window.return_widget is not ...:
             _RETURN_WIDGET_EXISTS = True
             self.main_window.return_widget.grid_object.grid_forget()
@@ -71,11 +78,10 @@ class EasyWidget:
         if row is ...:
             row = frame.grid_size()[1]
 
-        self.grid_object.grid(row=row, column=column, columnspan=column_span)
+        self.grid_object.grid(row=row, column=column, columnspan=column_span, sticky=sticky)
 
         if _RETURN_WIDGET_EXISTS:
-            for widget in self.main_window.return_widget:
-                widget.grid_object.grid()
+            self.main_window.return_widget.grid_object.grid()
 
     def remove_from_grid(self):
         """

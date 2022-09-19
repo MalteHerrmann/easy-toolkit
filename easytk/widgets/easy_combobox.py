@@ -33,7 +33,7 @@ class EasyCombobox(EasyWidget):
         :type main_window: easytk.Window
         """
         super().__init__()
-        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify)
+        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify, width)
 
         # Widget frame
         self.grid_object = tk.Frame(self.frame, width=width, height=height)

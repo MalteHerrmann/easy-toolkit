@@ -33,7 +33,7 @@ class EasyListbox(EasyWidget):
         :type main_window: easytk.Window
         """
         super().__init__()
-        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify)
+        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify, width)
         self.entries = values.copy()
         self.select_mode = select_mode
 

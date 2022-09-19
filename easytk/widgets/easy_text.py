@@ -28,7 +28,7 @@ class EasyText(EasyWidget):
             add_to_grid: bool = True
     ):
         super().__init__()
-        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify)
+        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify, width)
         self.export = export
 
         # Widget frame

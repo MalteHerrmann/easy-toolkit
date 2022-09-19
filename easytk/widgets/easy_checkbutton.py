@@ -20,7 +20,7 @@ class EasyCheckbutton(EasyWidget):
             column: int = 0,
             column_span: int = 1,
             frame: tk.Frame = ...,
-            anchor: ANCHORS = "center",
+            anchor: ANCHORS = "w",
             justify: JUSTIFICATIONS = "left",
             add_to_grid: bool = True
     ):
@@ -30,7 +30,7 @@ class EasyCheckbutton(EasyWidget):
         :type main_window: easytk.Window
         """
         super().__init__()
-        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify)
+        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify, width)
 
         # Widget frame
         self.grid_object = tk.Frame(self.frame, width=width, height=height)

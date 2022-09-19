@@ -43,11 +43,11 @@ class EasyFileDialog(EasyWidget):
         :type main_window: easytk.Window
         """
         super().__init__()
-        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify)
+        self.apply_settings(main_window, row, column, column_span, frame, anchor, justify, width)
         self.selection_type = selection_type
 
         # Widget frame
-        self.grid_object = tk.Frame(self.frame, width=width, height=height)
+        self.grid_object = tk.Frame(self.frame, width=width, height=height, borderwidth=2, highlightthickness=2, highlightcolor="green", relief="solid")
 
         # Label
         self.label_string_var = tk.StringVar()
@@ -91,7 +91,8 @@ class EasyFileDialog(EasyWidget):
             self.label.pack_forget()
 
         # No widget shrinking
-        self.grid_object.grid_propagate(False)
+        # self.grid_object.pack_propagate(False)
+        self.grid_object.pack_propagate(True)  # TODO: Nachvollziehen warum das hier so komisch ist...
 
         # Bind the string variable to the check path method
         self.object_string_var.trace("w", self.check_path)

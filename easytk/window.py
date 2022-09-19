@@ -47,6 +47,7 @@ class Window:
         self.label_width: int = ...
         self.return_values: Tuple[Any] = ...
         self.title: str = window_title
+        self.width: int = 450
         self.window_type: WINDOW_TYPES = window_type
         self._TESTING: bool = testing
 
@@ -60,9 +61,18 @@ class Window:
 
         # Initialize and configure the main window
         self.master_frame = tk.Toplevel(_ROOT)
+        # self.master_frame = tk.Toplevel(_ROOT, width=600)  # Frame width in widgets einstellen und pack_propagate auf False setzen
+        # self.master_frame.grid_propagate(False)
         self.master_frame.attributes("-topmost", True)
         self.master_frame.protocol("WM_DELETE_WINDOW", self.close)  # Close window on close button
         self.master_frame.title(window_title)
+        self.master_frame.grid_propagate(True)
+        self.master_frame.grid_rowconfigure(0, weight=1)
+        self.master_frame.grid_columnconfigure(0, weight=1)
+
+        self.main_frame = tk.Frame(self.master_frame, width=500, height=600, bd=0, highlightbackground="blue", highlightcolor="blue", highlightthickness=2)
+        self.main_frame.grid(row=0, column=0, sticky="wen", padx=2)
+        self.main_frame.grid_propagate(False)
 
         # Initialize collectors
         self.return_objects: List[widgets.EasyWidget] = []
@@ -80,7 +90,13 @@ class Window:
         Shows the `Window` and returns the value(s), that are given back
         for the chosen window type.
         """
-        column_span, _ = self.master_frame.grid_size()
+        column_span, rows = self.main_frame.grid_size()
+        print("Grid size: {} x {}".format(column_span, rows))
+        for idx_row in range(rows):
+            self.main_frame.grid_rowconfigure(idx_row, weight=1)
+        for idx_col in range(column_span):
+            self.main_frame.grid_columnconfigure(idx_col, weight=1)
+
         self.return_widget = self.add_return_widget(self.window_type, column_span=column_span)
 
         self.center_window()
@@ -127,7 +143,8 @@ class Window:
                     else:
                         exec("""self.{} = {}""".format(arg, repr(kwargs[arg])))
             else:
-                raise ValueError(f"Unknown setting: {arg}\n --> This cannot be edited at the present moment.")
+                raise ValueError(f"Unknown setting: {arg}\n --> This cannot be edited at the present moment." +
+                    "Feel free to open a GitHub issue addressing this, if you think a useful feature is missing.")
 
     def add_return_widget(
         self,
@@ -156,7 +173,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
@@ -194,7 +211,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
@@ -228,7 +245,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
@@ -266,7 +283,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
@@ -305,7 +322,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
@@ -342,7 +359,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
@@ -381,7 +398,7 @@ class Window:
         column: int = 0,
         column_span: int = 1,
         frame: tk.Frame = ...,
-        anchor: ANCHORS = "center",
+        anchor: ANCHORS = "w",
         justify: JUSTIFICATIONS = "left",
         add_to_grid: bool = True
     ):
