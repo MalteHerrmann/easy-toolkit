@@ -33,7 +33,7 @@ class EasyReturnWidget(EasyWidget):
 
     def __init__(self,
                  main_window,
-                 return_type: Literal["Selection", "SelectionFalse", "YesNo"],
+                 return_type: Literal['Selection', 'SelectionFalse', 'YesNo'],
                  row: int = ...,
                  column: int = 0,
                  column_span: int = 1,
@@ -43,41 +43,42 @@ class EasyReturnWidget(EasyWidget):
         self.apply_settings(main_window, row, column, column_span, frame, "center", "center")
 
         self.grid_object = tk.Frame(self.frame)
-        self.grid_object.grid_propagate(False)
+        # self.grid_object.grid_propagate(False)
 
-        if return_type in ("Selection", "SelectionFalse"):
+        if return_type in ('Selection', 'SelectionFalse'):
             self.select_button = tk.Button(
                 self.grid_object,
                 text=main_window.selection_text,
                 command=self.get_return_values
             )
-            self.select_button.pack(side="left")
-        elif return_type == "YesNo":
+            self.select_button.pack(side='top' if return_type == 'Selection' else 'right')
+        elif return_type == 'YesNo':
             self.yes_button = tk.Button(
                 self.grid_object,
                 text=main_window.yes_text,
                 command=self.yes_clicked
             )
-            self.yes_button.pack(side="left")
+            self.yes_button.pack(side='left')
         else:
             raise ValueError(f"Unknown window type: {return_type}")
 
-        if return_type == "SelectionFalse":
+        if return_type == 'SelectionFalse':
             self.false_button = tk.Button(
                 self.grid_object,
                 text=main_window.false_text,
                 command=self.no_clicked
             )
-            self.false_button.pack(side="left")
+            self.false_button.pack(side='left')
 
-        elif return_type == "YesNo":
+        elif return_type == 'YesNo':
             self.no_button = tk.Button(
                 self.grid_object,
                 text=main_window.no_text,
                 command=self.no_clicked
             )
-            self.no_button.pack(side="left")
+            self.no_button.pack(side='left')
 
+        # self.grid_object.config(borderwidth=2.0, relief='solid', highlightcolor="yellow", highlightbackground="yellow", highlightthickness=4)
         self.insert_into_grid(self.frame, row, column, column_span, check_return_widget=False)
 
     def yes_clicked(self):
