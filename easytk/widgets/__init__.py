@@ -16,7 +16,7 @@ from easytk.widgets.easy_label import EasyLabel
 from easytk.widgets.easy_listbox import EasyListbox
 from easytk.widgets.easy_text import EasyText
 from easytk.widgets.easy_widget import EasyWidget
-from easytk.widgets.return_buttons import EasyReturnWidget
+from easytk.widgets.easy_return_widget import EasyReturnWidget
 
 # TODO: Enable widget resizing/filling to container
 # TODO: Allow multiple columns next to each other (ideally with definable proportions)
@@ -28,4 +28,5 @@ from easytk.widgets.return_buttons import EasyReturnWidget
 # TODO: Use ttk styles?
 # TODO: Add project description for PyPI
 # TODO: Fix resizing of windows
+# TODO: Remove height from easytk except for listbox
 
