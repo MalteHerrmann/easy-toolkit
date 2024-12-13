@@ -2,7 +2,9 @@
 
 A simple API wrapper to create functional `tkinter` GUIs using only a few lines.
 
-![Tests](https://github.com/MalteHerrmann/easy-toolkit/actions/workflows/easytk_tests.yml/badge.svg)
+Since this is only using `tkinter`, which comes built-in with many Python installations,
+it can be run from within different environments that may restrict the use of other GUI libraries,
+e.g. within the Python REPL of software like [Blender](https://www.blender.org/).
 
 ## Examples
 
