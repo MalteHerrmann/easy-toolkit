@@ -22,3 +22,13 @@ import easytk
 
 true_or_false = easytk.ask_yes_no("Pose a question here.")
 ```
+
+## Dev Environment
+
+You can access the dev environment using [Nix flakes](https://nixos.wiki/wiki/Flakes):
+
+```bash
+nix develop
+```
+
+This will install the dependencies and open a shell with the necessary environment variables set.
