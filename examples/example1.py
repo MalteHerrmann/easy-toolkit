@@ -6,6 +6,10 @@ using the easytk package.
 # ------------------------------
 # Imports
 #
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import easytk
 
 
@@ -18,7 +22,7 @@ def main():
     """
     # Create the main window
     window = easytk.Window("Selection")
-    window.config(selection_text="Yep. Do it.")
+    window.config(selection_text="Return filename.")
     window.add_file_dialog("Test", default_value="Default", filetypes=[("Python files", "*.py")])
     returned_values = window.show()
 

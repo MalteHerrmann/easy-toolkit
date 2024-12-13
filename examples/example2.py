@@ -6,6 +6,10 @@ create a user interface using the easytk package.
 # ------------------------------
 # Imports
 #
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import easytk
 
 
